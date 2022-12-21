@@ -11,6 +11,7 @@ import {SuccessDialogComponent} from "./success-dialog/success-dialog.component"
 import {CsvFileExporterService} from "../service/csv-file-exporter.service";
 import {XmlFileExporter} from "../service/xml-file-exporter";
 import * as JsonToXML from "js2xmlparser";
+import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
 
 @Component({
   selector: 'app-root',
@@ -40,7 +41,10 @@ export class AppComponent implements  OnInit{
           modes: new FormControl(this.mode),
           regons: new FormControl()
         })
+    this.labelFiller()
     }
+
+
 
   form!: FormGroup
   sanitizedBlobUrl: any;
@@ -48,6 +52,10 @@ export class AppComponent implements  OnInit{
 
   title = 'cpu-vat';
   panelOpenState = false;
+
+  nipLabel = ''
+  accountLabel = ''
+  regonlabel = ''
 
   data: any = {
     "result": {
@@ -196,18 +204,58 @@ export class AppComponent implements  OnInit{
     this.searching = false
     switch (this.mode) {
       case 0:
+        let nips = this.nips.split(',')
+        for(let nip of nips) {
+          if(nip.length != 10 || !Number(nip)) {
+            this.dialog.open(InfoDialogComponent, {
+              data: "NIPy muszą składać się z 10 cyfr!"
+            })
+            return
+          }
+        }
         var link = "https://wl-api.mf.gov.pl/api/search/nips/" + this.nips + "?date=2022-12-21"
         break;
       case 1:
+        let accounts = this.accounts.split(',')
+        for(let account of accounts) {
+          if(account.length != 26 || !Number(account)) {
+            this.dialog.open(InfoDialogComponent, {
+              data: "Numery kont muszą składać się z 26 cyfr!"
+            })
+            return
+          }
+        }
         var link = "https://wl-api.mf.gov.pl/api/search/bank-accounts/" + this.accounts + "?date=2022-12-21"
         break;
       case 2:
+        let regons = this.regons.split(',')
+        for(let regon of regons) {
+          if(regon.length != 9 || !Number(regon)) {
+            this.dialog.open(InfoDialogComponent, {
+              data: "Numery REGON muszą składać się z 9 cyfr!"
+            })
+            return
+          }
+        }
         var link = "https://wl-api.mf.gov.pl/api/search/regons/" + this.regons + "?date=2022-12-21"
         break;
       case 3:
+        console.log("nip", this.nips, this.nips.length, "account", this.accounts, this.accounts.length, "nip")
+        if(!Number(this.nips) || !Number(this.accounts) || this.nips.length != 10 || this.accounts.length != 26) {
+          this.dialog.open(InfoDialogComponent, {
+            data: 'Numer nip powinien składać się z 10 cyfr, a numer konta z 26 cyfr'
+          })
+          return
+        }
         var link = "https://wl-api.mf.gov.pl//api/check/nip/" + this.nips +  "/bank-account/" + this.accounts + "?date=2022-12-21"
         break;
       case 4:
+        if(!Number(this.regons) || !Number(this.accounts) || this.regons.length != 9  || this.accounts.length != 26) {
+          this.dialog.open(InfoDialogComponent, {
+            data: 'Numer REGON powinien składać się z 9 cyfr, a numer konta z 26 cyfr'
+          })
+          return
+        }
         var link = "https://wl-api.mf.gov.pl/api/check/regon/" + this.regons + "/bank-account/" + this.accounts + "?date=2022-12-21"
         break;
       default:
@@ -264,5 +312,40 @@ export class AppComponent implements  OnInit{
   selectionChange() {
     this.searching = false
     this.data = ''
+    this.labelFiller()
+  }
+
+  labelFiller() {
+    this.nipLabelFiller()
+    this.accountLabelFiller()
+    this.regonLabelFiller()
+  }
+
+  nipLabelFiller() {
+    if(this.mode == 0) {
+      this.nipLabel = 'Wprowadz NIPy'
+    } else {
+      this.nipLabel = 'Wprowadz NIP'
+    }
+  }
+
+  accountLabelFiller() {
+    if(this.mode == 1) {
+      this.accountLabel = 'Wprowadz numery kont'
+    } else {
+      this.accountLabel = 'Wprowadz numer konta'
+    }
+  }
+
+  regonLabelFiller() {
+    if(this.mode == 2) {
+      this.regonlabel = 'Wprowadz numery REGON'
+    } else {
+      this.regonlabel = 'Wprowadz numer REGON'
+    }
+  }
+
+  help() {
+    this.dialog.open(HelpDialogComponent)
   }
 }

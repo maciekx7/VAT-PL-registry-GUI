@@ -9,13 +9,15 @@ import {BankAccounsComponent} from "./bank-accounts-component/bank-accounts.comp
 import {HttpClientModule} from "@angular/common/http";
 import {InfoDialogComponent} from "./info-dialog/info-dialog.component";
 import {SuccessDialogComponent} from "./success-dialog/success-dialog.component";
+import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     BankAccounsComponent,
     InfoDialogComponent,
-    SuccessDialogComponent
+    SuccessDialogComponent,
+    HelpDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,9 @@
 <div class="background-gradient panel">
-  <h1 class="words">Wyszukiwarka firm</h1>
+  <h1 class="words">Wykaz podatników VAT</h1>
+  <mat-divider></mat-divider>
+  <div class="right-content small-padding">
+    <button  (click)="help()" mat-mini-fab><mat-icon>help</mat-icon></button>
+  </div>
 
 
 <form class="form" [formGroup]="form">
@@ -8,41 +12,46 @@
         <mat-form-field>
           <mat-label>Tryby pracy</mat-label>
           <mat-select (selectionChange)="selectionChange()" formControlName="modes" [(value)]="mode">
-            <mat-option [value]="0">Nipy</mat-option>
-            <mat-option [value]="1">Konta bankowe</mat-option>
-            <mat-option [value]="2">Regony</mat-option>
-            <mat-option [value]="3">NIP + Numer konta</mat-option>
-            <mat-option [value]="4">REGON + Numer konta</mat-option>
+            <mat-optgroup label="Wyszukiwanie firm">
+              <mat-option [value]="0">Nipy</mat-option>
+              <mat-option [value]="1">Konta bankowe</mat-option>
+              <mat-option [value]="2">Regony</mat-option>
+            </mat-optgroup>
+            <mat-optgroup label="Sprawdzanie zależności">
+              <mat-option [value]="3">NIP + Numer konta</mat-option>
+              <mat-option [value]="4">REGON + Numer konta</mat-option>
+            </mat-optgroup>
           </mat-select>
         </mat-form-field>
       </li>
       <div *ngIf="mode == 0 || mode == 3">
         <li class="flex-item">
           <mat-form-field>
-            <mat-label>Wprowadź nipy</mat-label>
+            <mat-label>{{nipLabel}}</mat-label>
             <input matInput
                    formControlName="nips"
                    [(ngModel)]="nips">
           </mat-form-field>
         </li>
       </div>
-      <div *ngIf="mode == 1 || mode == 3 || mode == 4">
-        <li class="flex-item">
-          <mat-form-field>
-            <mat-label>Wprowadź numery kont</mat-label>
-            <input matInput
-                   formControlName="accounts"
-                   [(ngModel)]="accounts">
-          </mat-form-field>
-        </li>
-      </div>
+
       <div *ngIf="mode == 2 || mode == 4">
         <li class="flex-item">
           <mat-form-field>
-            <mat-label>Wprowadź regony</mat-label>
+            <mat-label>{{regonlabel}}</mat-label>
             <input matInput
                    formControlName="regons"
                    [(ngModel)]="regons">
+          </mat-form-field>
+        </li>
+      </div>
+      <div *ngIf="mode == 1 || mode == 3 || mode == 4">
+        <li class="flex-item">
+          <mat-form-field>
+            <mat-label>{{accountLabel}}</mat-label>
+            <input matInput
+                   formControlName="accounts"
+                   [(ngModel)]="accounts">
           </mat-form-field>
         </li>
       </div>
@@ -64,7 +73,7 @@
 
 
 
-
+<div *ngIf="mode == 0 || mode == 1 || mode == 2">
   <ul class="flex-container wrap">
     <li class="flex-item">
       <button mat-mini-fab color="primary"
@@ -81,6 +90,8 @@
       </div>
     </li>
   </ul>
+</div>
+
 
 <p></p>
   <div *ngIf="mode == 0 || mode == 1 || mode == 2">
@@ -101,6 +112,7 @@
           <p><b>Status Vat:</b> {{result.subjects[0].statusVat}}</p>
           <p><b>Adres roboczy:</b> {{result.subjects[0].workingAddress}}</p>
           <p><b>Adres zamieszkania:</b> {{result.subjects[0].residenceAddress}}</p>
+          <p><b>Daata rejestracji działalności: </b>{{result.subjects[0].registrationLegalDate}}</p>
           <p class="center-content">
             <button mat-button (click)="bankAccounts(result.subjects[0])">
               Numery kont
