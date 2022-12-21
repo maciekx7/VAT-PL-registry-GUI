@@ -18,6 +18,8 @@
 .wrap {
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
+  text-align: center;
+  *display: inline;
 }
 
 .flex-container {
@@ -33,6 +35,22 @@
   display: -webkit-flex;
   display: flex;
 }
+
+.container {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  //border: 1px solid silver;
+  text-align: center;
+}
+
+.wrap-basic {
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  text-align: center;
+  *display: inline;
+}
+
 
 .flex-item {
   padding: 5px

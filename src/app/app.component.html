@@ -3,7 +3,7 @@
 
 
 <form class="form" [formGroup]="form">
-    <ul class="flex-container wrap">
+    <ul class="container wrap-basic">
       <li class="flex-item">
         <mat-form-field>
           <mat-label>Tryby pracy</mat-label>
@@ -50,8 +50,15 @@
 
 
 
-<div class="right-content">
-  <button mat-mini-fab (click)="search()"><mat-icon>search</mat-icon></button>
+<div class="center-content">
+  <button mat-raised-button (click)="search()">
+    <div *ngIf="mode == 0 || mode == 1 || mode == 2">
+      Szukaj
+    </div>
+    <div *ngIf="mode == 3 || mode == 4">
+      Sprawdź zgodność
+    </div>
+  </button>
 </div>
 </form>
 
