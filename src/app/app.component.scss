@@ -1,0 +1,53 @@
+.mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.background-gradient {
+  background-image: radial-gradient(circle, #ff5a2c 0%, #111b51 100%);
+}
+
+.panel {
+  min-height: 100vh;
+}
+
+.words {
+  text-align: center;
+  color: white;
+}
+
+.wrap {
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.flex-container {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  //border: 1px solid silver;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-item {
+  padding: 5px
+}
+
+.center-content {
+  text-align: center;
+}
+.right-content {
+  text-align: right;
+  padding-right: 5px;
+}
+
+
+.mat-expansion-panel-header-description {
+//  justify-content: center;
+}
+
