@@ -1,3 +1,7 @@
+.white {
+  color:white;
+}
+
 .mat-mdc-form-field + .mat-mdc-form-field {
   margin-left: 8px;
 }
@@ -14,6 +18,10 @@
   padding-top: 10px;
   text-align: center;
   color: white;
+}
+
+.reverse {
+  flex-direction: row-reverse;
 }
 
 .wrap {

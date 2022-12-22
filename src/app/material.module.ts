@@ -42,6 +42,7 @@ import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator'
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [],
@@ -124,7 +125,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MatTableModule,
     ReactiveFormsModule,
     FormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    FontAwesomeModule
   ]
 })
 export class MaterialModule { }

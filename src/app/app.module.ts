@@ -5,11 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MaterialModule} from "./material.module";
-import {BankAccounsComponent} from "./bank-accounts-component/bank-accounts.component";
+import {BankAccounsComponent} from "./component/bank-accounts-component/bank-accounts.component";
 import {HttpClientModule} from "@angular/common/http";
-import {InfoDialogComponent} from "./info-dialog/info-dialog.component";
-import {SuccessDialogComponent} from "./success-dialog/success-dialog.component";
-import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
+import {InfoDialogComponent} from "./dialog/info-dialog/info-dialog.component";
+import {SuccessDialogComponent} from "./dialog/success-dialog/success-dialog.component";
+import {HelpDialogComponent} from "./dialog/help-dialog/help-dialog.component";
 
 @NgModule({
   declarations: [

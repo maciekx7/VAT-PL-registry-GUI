@@ -1,0 +1,28 @@
+  <h1 mat-dialog-title class="white">Pomoc</h1>
+  <mat-divider></mat-divider>
+
+  <mat-dialog-content >
+    <div class="white">
+      <h2>Co to jest?</h2>
+      Aplikacja pozwala na korzystanie z oficjalnegom, rządowego <a href="https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat">API Wykazu podatników VAT</a> i przeszukiwanie bazy danych podatników VAT.
+      <mat-divider></mat-divider>
+      <h2>Tryby działania</h2>
+      Aplikacja ma 5 trybów działania, podzielone na dwie kategorie:
+      <ul>
+        <li>
+          Wyszukiwanie firm
+          <ul>
+            <li>NIPy - wyszukiwanie jednej lub większej ilości firm, oddzielonych przecinkami, za pomocą ich numerów NIP. Jeden błędny numer NIP powoduje anulację całego wyszukania</li>
+            <li>Numery kont - wyszukiwanie jednej lub większej ilości firm, oddzielonych przecinkami, za pomocą numerów kont bankowych. Jeden błędny numer konta bankowego powoduje anulację całego wyszukania</li>
+            <li>REGONy - wyszukiwanie jednej lub większej ilości firm, oddzielonych przecinkami, za pomocą numerów REGON. Jeden błędny numer REGON powoduje anulację całego wyszukania</li>
+          </ul>
+        </li>
+        <li>Sprawdzanie zależności</li>
+        <ul>
+          <li>NIP + Numer konta - należy podać dokładnie jeden NIP i dokładnie jeden numer konta bankowego. W odpowiedzi system zwraca informację, czy podany numer konta i NIP są ze sobą powiązane</li>
+          <li>REGON + Numer konta - należy podać dokładnie jeden REGON i dokładnie jeden numer konta bankowego. W odpowiedzi system zwraca informację, czy podany numer konta i REGON są ze sobą powiązane </li>
+        </ul>
+      </ul>
+
+    </div>
+  </mat-dialog-content>

@@ -1,17 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
-import {BankAccounsComponent} from "./bank-accounts-component/bank-accounts.component";
+import {BankAccounsComponent} from "./component/bank-accounts-component/bank-accounts.component";
 import {DomSanitizer} from "@angular/platform-browser";
-import * as stream from "stream";
-import { saveAs } from "file-saver";
 import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {InfoDialogComponent} from "./info-dialog/info-dialog.component";
-import {SuccessDialogComponent} from "./success-dialog/success-dialog.component";
-import {CsvFileExporterService} from "../service/csv-file-exporter.service";
-import {XmlFileExporter} from "../service/xml-file-exporter";
-import * as JsonToXML from "js2xmlparser";
-import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
+import {InfoDialogComponent} from "./dialog/info-dialog/info-dialog.component";
+import {SuccessDialogComponent} from "./dialog/success-dialog/success-dialog.component";
+import {CsvFileExporterService} from "./service/file-exporters/csv-file-exporter.service";
+import {XmlFileExporterService} from "./service/file-exporters/xml-file-exporter.service";
+import {HelpDialogComponent} from "./dialog/help-dialog/help-dialog.component";
+import {JsonFileExporterService} from "./service/file-exporters/json-file-exporter.service";
+import {StartDataService} from "./service/start-data.service";
+import {LabelsService} from "./tools/labels.service";
+import {faFileCsv} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-root',
@@ -22,9 +23,24 @@ export class AppComponent implements  OnInit{
   constructor(public dialog: MatDialog,
               private sanitizer: DomSanitizer,
               private http: HttpClient,
-              private csvFileExporterService: CsvFileExporterService,
-              private xmlFileExporterService: XmlFileExporter
-  ) {
+              private xmlExporter: XmlFileExporterService,
+              private csvExporter: CsvFileExporterService,
+              private jsonExporter: JsonFileExporterService,
+              private startData: StartDataService,
+              private labelService: LabelsService) {
+  }
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      nips: new FormControl(),
+      accounts: new FormControl(),
+      modes: new FormControl(this.mode),
+      regons: new FormControl()
+    })
+    this.labelFiller()
+    this.data = (this.startData.setStartData())[0]
+    this.searching = (this.startData.setStartData())[1]
+
   }
 
   nips = ''
@@ -32,125 +48,19 @@ export class AppComponent implements  OnInit{
   regons = ''
   mode = 0
 
-  searching = false
-
-  ngOnInit(): void {
-        this.form = new FormGroup({
-          nips: new FormControl(),
-          accounts: new FormControl(),
-          modes: new FormControl(this.mode),
-          regons: new FormControl()
-        })
-    this.labelFiller()
-    }
-
-
 
   form!: FormGroup
-  sanitizedBlobUrl: any;
-  filename!: string;
 
-  title = 'cpu-vat';
   panelOpenState = false;
 
   nipLabel = ''
   accountLabel = ''
-  regonlabel = ''
+  regonLabel = ''
 
-  data: any = {
-    "result": {
-      "entries": [
-        {
-          "identifier": "6762453507",
-          "subjects": [
-            {
-              "name": "SOFTWARE MIND SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
-              "nip": "6762453507",
-              "statusVat": "Czynny",
-              "regon": "122511878",
-              "pesel": null,
-              "krs": "0000411748",
-              "residenceAddress": null,
-              "workingAddress": "ALEJA JANA PAWŁA II 43B, 31-864 KRAKÓW",
-              "representatives": [],
-              "authorizedClerks": [],
-              "partners": [],
-              "registrationLegalDate": "2012-03-15",
-              "registrationDenialBasis": null,
-              "registrationDenialDate": null,
-              "restorationBasis": null,
-              "restorationDate": null,
-              "removalBasis": null,
-              "removalDate": null,
-              "accountNumbers": [
-                "57175010480000000039846853",
-                "90175010480000000041159057",
-                "28160014621080551550000002",
-                "17160014621080551550000006",
-                "22160014621080551550000013",
-                "38160014621080551550000016",
-                "49160014621080551550000012",
-                "60160014621080551550000008",
-                "65160014621080551550000015",
-                "87160014621080551550000007",
-                "92160014621080551550000014",
-                "45175010480000000034856807",
-                "92175010480000000034856737",
-                "26175010480000000034856761"
-              ],
-              "hasVirtualAccounts": false
-            }
-          ]
-        },
-        {
-          "identifier": "5860005293",
-          "subjects": [
-            {
-              "name": "SYGNITY SPÓŁKA AKCYJNA",
-              "nip": "5860005293",
-              "statusVat": "Czynny",
-              "regon": "190407926",
-              "pesel": null,
-              "krs": "0000008162",
-              "residenceAddress": null,
-              "workingAddress": "POSTĘPU 17B, 02-676 WARSZAWA",
-              "representatives": [],
-              "authorizedClerks": [],
-              "partners": [],
-              "registrationLegalDate": "2003-12-31",
-              "registrationDenialBasis": null,
-              "registrationDenialDate": null,
-              "restorationBasis": null,
-              "restorationDate": null,
-              "removalBasis": null,
-              "removalDate": null,
-              "accountNumbers": [
-                "06105000861000009030059993",
-                "24105000861000009030056759",
-                "28105000861000009030059985",
-                "40124010371111001002805945",
-                "35191010482268036400100001",
-                "41105000861000009030068093",
-                "51102010260000180202202976",
-                "95105000861000009030056742",
-                "46102010260000190204754505",
-                "59102010260000120204802726",
-                "15114019770000306731002002",
-                "24160014621803944120000002",
-                "51160014621803944120000001",
-                "40160014621803944120000005",
-                "42114019770000306731002001",
-                "83194012100103771200100000"
-              ],
-              "hasVirtualAccounts": false
-            }
-          ]
-        }
-      ],
-      "requestDateTime": "21-12-2022 17:13:02",
-      "requestId": "xV5MX-8hman8e"
-    }
-  }
+  searching = false
+  data: any = ''
+
+
 
 
   bankAccounts(result: any) {
@@ -162,39 +72,31 @@ export class AppComponent implements  OnInit{
     })
   }
 
-  download() {
+  downloadJSON() {
     if(this.searching) {
-      return saveAs(
-        new Blob([JSON.stringify(this.data, null, 2)], { type: 'JSON' }), 'sample.json'
-      )
+      return this.jsonExporter.exportData(this.data)
     } else {
-      this.noSearchingDownloadAnavailable()
+      this.searchingDownloadUnavailable()
     }
 
   }
+  downloadXML() {
+    if(this.searching) {
+      return this.xmlExporter.exportData(this.data)
+    } else {
+      this.searchingDownloadUnavailable()
+    }
+  }
+
   downloadCSV() {
     if(this.searching) {
-      let options = {
-        format: {
-          doubleQuotes: true
-        },
-        declaration: {
-          include: false
-        }
-      }
-
-      let xml =  JsonToXML.parse("UniversalEvent", this.data, options)
-
-
-      return saveAs(
-        new Blob([xml], { type: 'XML' }), 'sample.xml'
-      )
+      this.csvExporter.exportData(this.data)
     } else {
-      this.noSearchingDownloadAnavailable()
+      this.searchingDownloadUnavailable()
     }
   }
 
-  noSearchingDownloadAnavailable() {
+  searchingDownloadUnavailable() {
     this.dialog.open(InfoDialogComponent, {
       data: "Aby pobrać plik, wyszukaj najpierw poprawną firmę!"
     })
@@ -261,8 +163,16 @@ export class AppComponent implements  OnInit{
       default:
         var link = ''
     }
+
+    this.apiSearch(link)
+
+  }
+
+  apiSearch(link: string) {
     let errors = false
     this.data = ''
+
+
     this.http.get<any>(link).subscribe(data => {
       console.log("data", data)
       if(this.mode == 0 || this.mode == 1 || this.mode == 2) {
@@ -289,15 +199,14 @@ export class AppComponent implements  OnInit{
           })
         } else {
 
-        let result = 'Niepoprawne dane'
-        this.dialog.open(SuccessDialogComponent, {
-          data: result
-        })
+          let result = 'Niepoprawne dane'
+          this.dialog.open(SuccessDialogComponent, {
+            data: result
+          })
         }
       }
 
 
-    console.log(errors, 'errors')
       if(!errors) {
         this.data = data
         this.searching = true
@@ -316,34 +225,12 @@ export class AppComponent implements  OnInit{
   }
 
   labelFiller() {
-    this.nipLabelFiller()
-    this.accountLabelFiller()
-    this.regonLabelFiller()
+    this. nipLabel = this.labelService.nipLabelFiller(this.mode)
+    this.accountLabel = this.labelService.accountLabelFiller(this.mode)
+    this.regonLabel = this.labelService.regonLabelFiller(this.mode)
   }
 
-  nipLabelFiller() {
-    if(this.mode == 0) {
-      this.nipLabel = 'Wprowadz NIPy'
-    } else {
-      this.nipLabel = 'Wprowadz NIP'
-    }
-  }
 
-  accountLabelFiller() {
-    if(this.mode == 1) {
-      this.accountLabel = 'Wprowadz numery kont'
-    } else {
-      this.accountLabel = 'Wprowadz numer konta'
-    }
-  }
-
-  regonLabelFiller() {
-    if(this.mode == 2) {
-      this.regonlabel = 'Wprowadz numery REGON'
-    } else {
-      this.regonlabel = 'Wprowadz numer REGON'
-    }
-  }
 
   help() {
     this.dialog.open(HelpDialogComponent)
